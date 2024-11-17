@@ -6,8 +6,7 @@ import java.util.Arrays;
  * The vertical composition of blocks.
  *
  * @author Samuel A. Rebelsky
- * @author Your Name Here
- * @author Your Name Here
+ * @author Princess Alexander
  */
 public class VComp implements AsciiBlock {
   // +--------+------------------------------------------------------------
@@ -38,8 +37,7 @@ public class VComp implements AsciiBlock {
    * @param bottomBlock
    *   The block on the bottom.
    */
-  public VComp(HAlignment alignment, AsciiBlock topBlock,
-      AsciiBlock bottomBlock) {
+  public VComp(HAlignment alignment, AsciiBlock topBlock, AsciiBlock bottomBlock) {
     this.align = alignment;
     this.blocks = new AsciiBlock[] {topBlock, bottomBlock};
   } // VComp(HAlignment, AsciiBlock, AsciiBlock)
@@ -55,7 +53,7 @@ public class VComp implements AsciiBlock {
   public VComp(HAlignment alignment, AsciiBlock[] blocksToCompose) {
     this.align = alignment;
     this.blocks = Arrays.copyOf(blocksToCompose, blocksToCompose.length);
-  } // VComp(HAlignment, AsciiBLOCK[])
+  } // VComp(HAlignment, AsciiBlock[])
 
   // +---------+-----------------------------------------------------------
   // | Methods |
@@ -71,8 +69,41 @@ public class VComp implements AsciiBlock {
    * @exception Exception
    *   if i is outside the range of valid rows.
    */
+  @Override
   public String row(int i) throws Exception {
-    return "";  // STUB
+    // Determine which block this row belongs to
+    int rowIndex = i;
+    for (AsciiBlock block : blocks) {
+      if (rowIndex < block.height()) {
+        // Determine padding for alignment
+        int paddingLeft;
+        int paddingRight;
+        int diff = this.width() - block.width();
+
+        switch (this.align) {
+          case LEFT -> {
+            paddingLeft = 0;
+            paddingRight = diff;
+          } //case
+          case CENTER -> {
+            paddingLeft = diff / 2;
+            paddingRight = diff - paddingLeft;
+          } //case
+          case RIGHT -> {
+            paddingLeft = diff;
+            paddingRight = 0;
+          } //case
+          default -> throw new Exception("Unknown alignment");
+        } // switch
+
+        return " ".repeat(paddingLeft) + block.row(rowIndex) + " ".repeat(paddingRight);
+        //return composed row
+      } else {
+        rowIndex -= block.height(); // move to the next block
+      } // if/else
+    } // for
+
+    throw new Exception("Invalid row " + i); // if row is out of bounds
   } // row(int)
 
   /**
@@ -80,8 +111,13 @@ public class VComp implements AsciiBlock {
    *
    * @return the number of rows
    */
+  @Override
   public int height() {
-    return 0;   // STUB
+    int totalHeight = 0;
+    for (AsciiBlock block : this.blocks) {
+      totalHeight += block.height();
+    } // for
+    return totalHeight; // return total height
   } // height()
 
   /**
@@ -89,8 +125,15 @@ public class VComp implements AsciiBlock {
    *
    * @return the number of columns
    */
+  @Override
   public int width() {
-    return 0;   // STUB
+    int maxWidth = 0;
+    for (AsciiBlock block : this.blocks) {
+      if (block.width() > maxWidth) {
+        maxWidth = block.width();
+      } // if
+    } // for
+    return maxWidth; // return the width of the widest block
   } // width()
 
   /**
@@ -102,7 +145,14 @@ public class VComp implements AsciiBlock {
    * @return true if the two blocks are structurally equivalent and
    *    false otherwise.
    */
+  @Override
   public boolean eqv(AsciiBlock other) {
-    return false;       // STUB
+    if (other instanceof VComp) {
+      VComp that = (VComp) other;
+      return Arrays.equals(this.blocks, that.blocks) && this.align == that.align;
+      // return comparison result
+    } // if
+    return false; // return false if not equivalent
   } // eqv(AsciiBlock)
 } // class VComp
+

@@ -1,90 +1,100 @@
 package edu.grinnell.csc207.blocks;
 
 /**
- * A text block surrounded by a single letter.
- *
+ * A block that surrounds another block with a specified character.
  * @author Samuel A. Rebelsky
- * @author Your Name Here
+ * @author Princess Alexander
  */
 public class Surrounded implements AsciiBlock {
-  // +--------+------------------------------------------------------------
+  // +--------+------------------------------------------------------
   // | Fields |
   // +--------+
 
   /**
-   * The stuff in the box.
+   * The block we are surrounding.
    */
-  AsciiBlock contents;
+  AsciiBlock innerBlock; // The block to surround
 
   /**
-   * The character we put around the box.
+   * The character we use for surrounding the block.
    */
-  String surroundChar;
+  char surroundChar; // The character used for the border
 
-  // +--------------+------------------------------------------------------
+  // +--------------+------------------------------------------------
   // | Constructors |
   // +--------------+
 
   /**
-   * Build a new block with the specified contents.
+   * Create a new Surrounded block.
    *
-   * @param blockContents
-   *   The contents of the block.
-   *
-   * @param theChar
-   *   The character that we use to surround the block.
+   * @param block The inner block to be surrounded.
+   * @param ch The character used for the surrounding border.
    */
-  public Surrounded(AsciiBlock blockContents, char theChar) {
-    this.contents = blockContents;
-    this.surroundChar = Character.toString(theChar);
-  } // Surrounded(AsciiBlock)
+  public Surrounded(AsciiBlock block, char ch) {
+    this.innerBlock = block;
+    this.surroundChar = ch;
+  } // Surrounded(AsciiBlock, char)
 
-  // +---------+-----------------------------------------------------------
-  // | Methods |
-  // +---------+
+  // +--------------------+------------------------------------------
+  // | AsciiBlock methods |
+  // +--------------------+
 
   /**
-   * Get one row from the block.
+   * Get the row at the given index.
    *
-   * @param i the number of the row
+   * @param i The row number.
    *
-   * @return row i.
-   *
-   * @exception Exception
-   *   If the row is invalid.
+   * @return The specified row, including the surrounding characters.
+   * @exception Exception if the row number is invalid.
    */
+  @Override
   public String row(int i) throws Exception {
-    throw new Exception("Not yet implemented"); // STUB
+    if (i == 0 || i == this.height() - 1) {
+      // Top or bottom border
+      return String.valueOf(surroundChar).repeat(this.width()); // return
+    } else if (i > 0 && i < this.height() - 1) {
+      // Rows from the inner block
+      return surroundChar + innerBlock.row(i - 1) + surroundChar; // return
+    } else {
+      throw new Exception("Invalid row " + i); // throw exception for invalid row
+    } // if/else
   } // row(int)
 
   /**
-   * Determine how many rows are in the block.
+   * Determine the height of the block.
    *
-   * @return the number of rows
+   * @return The height of the surrounded block.
    */
+  @Override
   public int height() {
-    return 0;   // STUB
+    return innerBlock.height() + 2; // return the inner height plus top and bottom border
   } // height()
 
   /**
-   * Determine how many columns are in the block.
+   * Determine the width of the block.
    *
-   * @return the number of columns
+   * @return The width of the surrounded block.
    */
+  @Override
   public int width() {
-    return 0;   // STUB
+    return innerBlock.width() + 2; // return the inner width plus left and right border
   } // width()
 
   /**
    * Determine if another block is structurally equivalent to this block.
    *
-   * @param other
-   *   The block to compare to this block.
+   * @param other The block to compare to this block.
    *
-   * @return true if the two blocks are structurally equivalent and
-   *    false otherwise.
+   * @return true if the two blocks are structurally equivalent and false otherwise.
    */
+  @Override
   public boolean eqv(AsciiBlock other) {
-    return false;       // STUB
+    if (other instanceof Surrounded) {
+      Surrounded that = (Surrounded) other;
+      return this.surroundChar == that.surroundChar && this.innerBlock.eqv(that.innerBlock);
+      // return comparison result
+    } // if
+    return false; // return false if not equivalent
   } // eqv(AsciiBlock)
+
 } // class Surrounded

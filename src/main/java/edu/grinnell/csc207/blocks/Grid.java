@@ -4,7 +4,7 @@ package edu.grinnell.csc207.blocks;
  * A grid of a single text block.
  *
  * @author Samuel A. Rebelsky
- * @author Your Name Here
+ * @author Princess Alexander
  */
 public class Grid implements AsciiBlock {
   // +--------+------------------------------------------------------------
@@ -14,17 +14,17 @@ public class Grid implements AsciiBlock {
   /**
    * One element of the grid.
    */
-  AsciiBlock element;
+  AsciiBlock element; // The block to repeat in the grid
 
   /**
    * The number of times the element is repeated horizontally.
    */
-  int hreps;
+  int hreps; // Horizontal repetitions
 
   /**
    * The number of times the element is repeated vertically.
    */
-  int vreps;
+  int vreps; // Vertical repetitions
 
   // +--------------+------------------------------------------------------
   // | Constructors |
@@ -38,18 +38,17 @@ public class Grid implements AsciiBlock {
    * @param horizRepetitions
    *   The number of horizontal repetitions in the grid.
    * @param vertRepetitions
-   *   THe number of vertical repetitions in the grid.
+   *   The number of vertical repetitions in the grid.
    */
-  public Grid(AsciiBlock gridElement, int horizRepetitions,
-      int vertRepetitions) {
+  public Grid(AsciiBlock gridElement, int horizRepetitions, int vertRepetitions) {
     this.element = gridElement;
     this.hreps = horizRepetitions;
     this.vreps = vertRepetitions;
   } // Grid(AsciiBlock, int, int)
 
-  // +---------+-----------------------------------------------------------
-  // | Methods |
-  // +---------+
+  // +--------------------+------------------------------------------
+  // | AsciiBlock methods |
+  // +--------------------+
 
   /**
    * Get one row from the block.
@@ -61,8 +60,19 @@ public class Grid implements AsciiBlock {
    * @exception Exception
    *   If the row is invalid.
    */
+  @Override
   public String row(int i) throws Exception {
-    throw new Exception("Not yet implemented"); // STUB
+    if (i < 0 || i >= this.height()) {
+      throw new Exception("Invalid row " + i); // Throw exception for invalid row
+    } // if
+
+    // Determine which row of the original block this corresponds to
+    int blockRow = i % this.element.height();
+
+    // Get the block's row and repeat it horizontally
+    String repeatedRow = this.element.row(blockRow).repeat(this.hreps);
+
+    return repeatedRow; // return
   } // row(int)
 
   /**
@@ -70,8 +80,9 @@ public class Grid implements AsciiBlock {
    *
    * @return the number of rows
    */
+  @Override
   public int height() {
-    return 0;   // STUB
+    return this.element.height() * this.vreps; // Return total height based on vertical repetitions
   } // height()
 
   /**
@@ -79,8 +90,9 @@ public class Grid implements AsciiBlock {
    *
    * @return the number of columns
    */
+  @Override
   public int width() {
-    return 0;   // STUB
+    return this.element.width() * this.hreps; // Return total width based on horizontal repetitions
   } // width()
 
   /**
@@ -92,21 +104,14 @@ public class Grid implements AsciiBlock {
    * @return true if the two blocks are structurally equivalent and
    *    false otherwise.
    */
+  @Override
   public boolean eqv(AsciiBlock other) {
-    return ((other instanceof Grid) && (this.eqv((Grid) other)));
+    if (other instanceof Grid) {
+      Grid that = (Grid) other;
+      return this.hreps == that.hreps && this.vreps == that.vreps && this.element.eqv(that.element);
+      // return comparison result
+    } // if
+    return false; // return false if not equivalent
   } // eqv(AsciiBlock)
 
-  /**
-   * Determine if another grid is structurally equivalent to this grid.
-   *
-   * @param other
-   *   The grid to compare to this grid.
-   *
-   * @return true if the two blocks are structurally equivalent and
-   *    false otherwise.
-   */
-  public boolean eqv(Grid other) {
-    return (this.hreps == other.hreps) && (this.vreps == other.vreps)
-        && (this.element.eqv(other.element));
-  } // eqv(Grid)
 } // class Grid
