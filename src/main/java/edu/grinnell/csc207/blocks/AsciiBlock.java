@@ -63,7 +63,7 @@ public interface AsciiBlock {
     // Check if both blocks are of the same type
     if (block1.getClass() != block2.getClass()) {
       return false;
-    }
+    } // if
 
   // Use the eqv method of the specific block implementation
     return block1.eqv(block2);

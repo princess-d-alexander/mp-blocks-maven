@@ -16,7 +16,7 @@ import edu.grinnell.csc207.blocks.VComp;
  * Experiments with ASCII blocks.
  *
  * @author Samuel A. Rebelsky
- * 
+ *
  */
 public class Blocks {
   /**

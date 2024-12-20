@@ -7,6 +7,7 @@ import java.util.Arrays;
  * testing.
  *
  * @author Samuel A. Rebelsky
+ * @author Princess Alexander
  */
 public class Lines implements AsciiBlock {
   // +--------+------------------------------------------------------------
@@ -111,6 +112,13 @@ public class Lines implements AsciiBlock {
    *    false otherwise.
    */
   public boolean eqv(AsciiBlock other) {
-    return false;       // STUB
+    if (!(other instanceof Lines)) {
+      return false;
+    } // if
+    Lines otherLines = (Lines) other;
+    if (this.width != otherLines.width || this.height() != otherLines.height()) {
+      return false;
+    } // if
+    return Arrays.equals(this.lines, otherLines.lines);
   } // eqv(AsciiBlock)
 } // class Lines

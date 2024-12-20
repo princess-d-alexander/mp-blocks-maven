@@ -113,7 +113,8 @@ public class Padded implements AsciiBlock {
     };
 
     String contentRow = this.block.row(i - topPadding);
-    return this.pad.repeat(leftPadding) + contentRow + this.pad.repeat(this.width - leftPadding - contentRow.length());
+    return this.pad.repeat(leftPadding) + contentRow
+                     + this.pad.repeat(this.width - leftPadding - contentRow.length());
   } // row(int)
 
   /**
