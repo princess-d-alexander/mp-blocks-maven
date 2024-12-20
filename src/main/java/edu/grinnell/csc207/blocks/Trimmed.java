@@ -1,114 +1,147 @@
-// package edu.grinnell.csc207.blocks;
+package edu.grinnell.csc207.blocks;
 
-// /**
-//  * A trimmed ASCII block.
-//  *
-//  * @author Samuel A. Rebelsky
-//  * @author Your Name Here
-//  */
-// public class Trimmed implements AsciiBlock {
-//   // +--------+------------------------------------------------------------
-//   // | Fields |
-//   // +--------+
+/**
+ * A trimmed ASCII block.
+ *
+ * @author Samuel A. Rebelsky
+ * @author Princess Alexander
+ */
+public class Trimmed implements AsciiBlock {
+  // +--------+------------------------------------------------------------
+  // | Fields |
+  // +--------+
 
-//   /**
-//    * The original block.
-//    */
-//   AsciiBlock block;
+  /**
+   * The original block.
+   */
+  AsciiBlock block;
 
-//   /**
-//    * Which part of the block do we keep horizontally?
-//    */
-//   HAlignment halign;
+  /**
+   * Which part of the block do we keep horizontally?
+   */
+  HAlignment halign;
 
-//   /**
-//    * Which part of the block do we keep vertically?
-//    */
-//   VAlignment valign;
+  /**
+   * Which part of the block do we keep vertically?
+   */
+  VAlignment valign;
 
-//   /**
-//    * How much of the block do we keep horizontally?
-//    */
-//   int width;
+  /**
+   * How much of the block do we keep horizontally?
+   */
+  int width;
 
-//   /**
-//    * How much of the block do we keep vertically?
-//    */
-//   int height;
+  /**
+   * How much of the block do we keep vertically?
+   */
+  int height;
 
-//   // +--------------+------------------------------------------------------
-//   // | Constructors |
-//   // +--------------+
+  // +--------------+------------------------------------------------------
+  // | Constructors |
+  // +--------------+
 
-//   /**
-//    * Build a new block with the specified contents.
-//    *
-//    * @param original
-//    *   The original block.
-//    * @param horiz
-//    *   How the trimmed block is horizontally aligned on the original.
-//    * @param vert
-//    *   How the trimmed block is vertically aligned on the original.
-//    * @param trimmedWidth
-//    *   The width of the trimmed block.
-//    * @param trimmedHeight
-//    *   The height of the trimmed block.
-//    */
-//   public Trimmed(AsciiBlock original, HAlignment horiz, VAlignment vert,
-//       int trimmedWidth, int trimmedHeight) {
-//     this.block = original;
-//     this.halign = horiz;
-//     this.valign = vert;
-//     this.width = trimmedWidth;
-//     this.height = trimmedHeight;
-//   } // Trimmed(AsciiBlock, HAlignment, VAlignment, int, int)
+  /**
+   * Build a new block with the specified contents.
+   *
+   * @param original
+   *   The original block.
+   * @param horiz
+   *   How the trimmed block is horizontally aligned on the original.
+   * @param vert
+   *   How the trimmed block is vertically aligned on the original.
+   * @param trimmedWidth
+   *   The width of the trimmed block.
+   * @param trimmedHeight
+   *   The height of the trimmed block.
+   */
+  public Trimmed(AsciiBlock original, HAlignment horiz, VAlignment vert,
+      int trimmedWidth, int trimmedHeight) {
+    this.block = original;
+    this.halign = horiz;
+    this.valign = vert;
+    this.width = trimmedWidth;
+    this.height = trimmedHeight;
+  } // Trimmed(AsciiBlock, HAlignment, VAlignment, int, int)
 
-//   // +---------+-----------------------------------------------------------
-//   // | Methods |
-//   // +---------+
+  // +---------+-----------------------------------------------------------
+  // | Methods |
+  // +---------+
 
-//   /**
-//    * Get one row from the block.
-//    *
-//    * @param i the number of the row
-//    *
-//    * @return row i.
-//    *
-//    * @exception Exception
-//    *   If the row is invalid.
-//    */
-//   public String row(int i) throws Exception {
-//     throw new Exception("Not yet implemented"); // STUB
-//   } // row(int)
+  /**
+   * Get one row from the block.
+   *
+   * @param i the number of the row
+   *
+   * @return row i.
+   *
+   * @exception Exception
+   *   If the row is invalid.
+   */
+  public String row(int i) throws Exception {
+    if (i < 0 || i >= this.height) {
+      throw new Exception("Invalid row " + i);
+    }
 
-//   /**
-//    * Determine how many rows are in the block.
-//    *
-//    * @return the number of rows
-//    */
-//   public int height() {
-//     return 0;   // STUB
-//   } // height()
+    // Calculate the starting row in the original block
+    int startRow;
+    switch (this.valign) {
+      case TOP -> startRow = 0;
+      case CENTER -> startRow = (this.block.height() - this.height) / 2;
+      case BOTTOM -> startRow = this.block.height() - this.height;
+      default -> throw new Exception("Invalid vertical alignment");
+    }
 
-//   /**
-//    * Determine how many columns are in the block.
-//    *
-//    * @return the number of columns
-//    */
-//   public int width() {
-//     return 0;   // STUB
-//   } // width()
+    int actualRow = startRow + i;
+    String originalRow = this.block.row(actualRow);
 
-//   /**
-//    * Determine if another block is structurally equivalent to this block.
-//    *
-//    * @param other
-//    *   The block to compare to this block.
-//    *
-//    * @return true if the two blocks are structurally equivalent and
-//    *    false otherwise.
-//    */
-//   public boolean eqv(AsciiBlock other) {
-//     return false;       // STUB
-//   } // eqv(AsciiBlock)
-// } // class Trimmed
+    // Calculate the starting column in the original row
+    int startCol;
+    switch (this.halign) {
+      case LEFT -> startCol = 0;
+      case CENTER -> startCol = (this.block.width() - this.width) / 2;
+      case RIGHT -> startCol = this.block.width() - this.width;
+      default -> throw new Exception("Invalid horizontal alignment");
+    }
+
+    return originalRow.substring(startCol, startCol + this.width);
+  } // row(int)
+
+  /**
+   * Determine how many rows are in the block.
+   *
+   * @return the number of rows
+   */
+  public int height() {
+    return this.height;
+  } // height()
+
+  /**
+   * Determine how many columns are in the block.
+   *
+   * @return the number of columns
+   */
+  public int width() {
+    return this.width;
+  } // width()
+
+  /**
+   * Determine if another block is structurally equivalent to this block.
+   *
+   * @param other
+   *   The block to compare to this block.
+   *
+   * @return true if the two blocks are structurally equivalent and
+   *    false otherwise.
+   */
+  public boolean eqv(AsciiBlock other) {
+    if (!(other instanceof Trimmed)) {
+      return false;
+    }
+    Trimmed otherTrimmed = (Trimmed) other;
+    return this.halign == otherTrimmed.halign
+        && this.valign == otherTrimmed.valign
+        && this.width == otherTrimmed.width
+        && this.height == otherTrimmed.height
+        && this.block.eqv(otherTrimmed.block);
+  } // eqv(AsciiBlock)
+} // class Trimmed
