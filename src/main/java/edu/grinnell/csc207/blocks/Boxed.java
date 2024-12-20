@@ -99,11 +99,20 @@ public class Boxed implements AsciiBlock {
    *   The block to compare to this block.
    *
    * @return true if the two blocks are structurally equivalent and
-   *    false otherwise.
+   *     false otherwise.
    */
+  @Override
   public boolean eqv(AsciiBlock other) {
-    return false;       // STUB
+    // Check if the other block is a Boxed block
+    if (!(other instanceof Boxed)) {
+      return false;
+    } // eqv
+
+    // Cast the other block to Boxed and compare contents
+    Boxed otherBoxed = (Boxed) other;
+    return this.contents.eqv(otherBoxed.contents);
   } // eqv(AsciiBlock)
+
 
   /**
    * Determine if another Boxed is structurally equivalent to this block.
