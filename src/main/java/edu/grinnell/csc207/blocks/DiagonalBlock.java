@@ -8,7 +8,7 @@ package edu.grinnell.csc207.blocks;
  * fills the remaining spaces.
  * 
  * @author Moise Milnge
- * @author Your Name Here
+ * 
  */
 public class DiagonalBlock implements AsciiBlock {
     // +--------+------------------------------------------------------------

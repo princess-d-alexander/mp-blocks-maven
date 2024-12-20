@@ -6,7 +6,7 @@ package edu.grinnell.csc207.blocks;
  * This class generates a checkerboard pattern using two specified characters.
  * 
  * @author Samuel A. Rebelsky
- * @author Your Name Here
+ * @author Moise Milnge
  */
 public class CheckerBoard implements AsciiBlock {
     private char char1; // First character for the checkerboard

@@ -60,8 +60,18 @@ public interface AsciiBlock {
    * @return true if they are structurally equivalent and false otherwise.
    */
   public static boolean eqv(AsciiBlock block1, AsciiBlock block2) {
-    return false;      // STUB
+    // Check if both blocks are of the same type
+    if (block1.getClass() != block2.getClass()) {
+      return false;
+    }
+
+  // Use the eqv method of the specific block implementation
+    return block1.eqv(block2);
   } // eqv(AsciiBlock, AsciiBlock)
+
+
+  
+
 
   /**
    * Determine if two blocks are equal in that they have the same,
@@ -137,3 +147,5 @@ public interface AsciiBlock {
    */
   public boolean eqv(AsciiBlock other);
 } // interface AsciiBlock
+
+
