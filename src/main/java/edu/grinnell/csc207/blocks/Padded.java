@@ -3,8 +3,10 @@ package edu.grinnell.csc207.blocks;
 /**
  * A padded ASCII block.
  *
+ * This class adds padding around an existing block to achieve a specific width and height.
+ *
  * @author Samuel A. Rebelsky
- * @author Your Name Here
+ * @author Princess Alexander
  */
 public class Padded implements AsciiBlock {
   // +--------+------------------------------------------------------------
@@ -85,8 +87,33 @@ public class Padded implements AsciiBlock {
    * @exception Exception
    *   If the row is invalid.
    */
+  @Override
   public String row(int i) throws Exception {
-    throw new Exception("Not yet implemented"); // STUB
+    if (i < 0 || i >= this.height) {
+      throw new Exception("Row index out of bounds");
+    } // if
+
+    // Calculate vertical padding
+    int topPadding = switch (this.valign) {
+      case TOP -> 0;
+      case CENTER -> (this.height - this.block.height()) / 2;
+      case BOTTOM -> this.height - this.block.height();
+    };
+
+    if (i < topPadding || i >= topPadding + this.block.height()) {
+      // This row is part of the vertical padding
+      return this.pad.repeat(this.width);
+    } // if
+
+    // Calculate horizontal padding
+    int leftPadding = switch (this.halign) {
+      case LEFT -> 0;
+      case CENTER -> (this.width - this.block.width()) / 2;
+      case RIGHT -> this.width - this.block.width();
+    };
+
+    String contentRow = this.block.row(i - topPadding);
+    return this.pad.repeat(leftPadding) + contentRow + this.pad.repeat(this.width - leftPadding - contentRow.length());
   } // row(int)
 
   /**
@@ -94,8 +121,9 @@ public class Padded implements AsciiBlock {
    *
    * @return the number of rows
    */
+  @Override
   public int height() {
-    return 0;   // STUB
+    return this.height;
   } // height()
 
   /**
@@ -103,8 +131,9 @@ public class Padded implements AsciiBlock {
    *
    * @return the number of columns
    */
+  @Override
   public int width() {
-    return 0;   // STUB
+    return this.width;
   } // width()
 
   /**
@@ -116,7 +145,22 @@ public class Padded implements AsciiBlock {
    * @return true if the two blocks are structurally equivalent and
    *    false otherwise.
    */
+  @Override
   public boolean eqv(AsciiBlock other) {
-    return false;       // STUB
+    if (!(other instanceof Padded)) {
+      return false;
+    } // if
+    Padded o = (Padded) other;
+    return this.pad.equals(o.pad)
+           &&
+           this.halign == o.halign
+           &&
+           this.valign == o.valign
+           &&
+           this.width == o.width
+           &&
+           this.height == o.height
+           &&
+           this.block.eqv(o.block);
   } // eqv(AsciiBlock)
 } // class Padded
