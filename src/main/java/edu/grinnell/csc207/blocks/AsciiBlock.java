@@ -70,9 +70,6 @@ public interface AsciiBlock {
   } // eqv(AsciiBlock, AsciiBlock)
 
 
-  
-
-
   /**
    * Determine if two blocks are equal in that they have the same,
    * width, height, and rows.

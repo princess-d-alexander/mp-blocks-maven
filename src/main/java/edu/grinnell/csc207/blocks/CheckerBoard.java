@@ -27,7 +27,7 @@ public class CheckerBoard implements AsciiBlock {
         this.char2 = char2;
         this.width = width;
         this.height = height;
-    }
+    } // CheckerBoard
 
     @Override
     public String row(int i) {
@@ -38,28 +38,28 @@ public class CheckerBoard implements AsciiBlock {
                 row.append(char1);
             } else {
                 row.append(char2);
-            }
-        }
+            } // else
+        } // for
         return row.toString();
-    }
+    } // String
 
     @Override
     public int height() {
         return height; // Return the height of the checkerboard
-    }
+    } // height
 
     @Override
     public int width() {
         return width; // Return the width of the checkerboard
-    }
+    } // width
 
     @Override
     public boolean eqv(AsciiBlock other) {
         if (!(other instanceof CheckerBoard)) {
             return false;
-        }
+        } // if
         CheckerBoard o = (CheckerBoard) other;
         return this.char1 == o.char1 && this.char2 == o.char2 &&
                this.width == o.width && this.height == o.height;
-    }
-}
+    } // eqv
+} //CheckBoard
